@@ -1,33 +1,22 @@
-// Helper functions to read, write and append to files
-
-const fs =  require('fs');
+const fs = require('fs');
 const util = require('util');
+const readFromFile = util.promisify(fs.readFile);
 
-const readFile = util.promisify(fs.readFile);
-/**
- * @param {string} destination
- * @param {object} content
- * @returns {Promise<void>}
- */
+const writeToFile = (destination, content) =>
+  fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
+    err ? console.error(err) : console.info(`\nData written to ${destination}`)
+  );
 
-const writeFile = (destination, content) => 
-    fs.writeFile(destination, JSON.stringify(content, null, 4), (err) => 
-        err ? console.log(err) : console.log(`\nEntry added successfully, check ${destination} file\n`)
-    );
-
-/**
- * @param {string} file
- * @param {object} content
- * @returns {Promise<void>}
- */
-
-const appendFile = (file, content) => {
+const readAndAppend = (content, file) => {
     fs.readFile(file, 'utf8', (err, data) => {
-        if(err) throw err;
-        const fileContent = JSON.parse(data);
-        fileContent.push(content);
-        writeFile(file, fileContent);
+        if (err) {
+            console.error(err);
+        } else {
+            const parsedData = [JSON.parse(data)];
+            parsedData.push(content);
+            writeToFile(file, parsedData);
+        }
     });
 };
 
-module.exports = { readFile, writeFile, appendFile };
+module.exports = { readFromFile, writeToFile, readAndAppend };
