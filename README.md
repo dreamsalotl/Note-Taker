@@ -28,7 +28,7 @@ To use the application, run the following command:
 node server.js
 ```
 
-Then open your browser and go to localhost:3001 to use the application. You can also use the deployed application at https://note-taker-dww.herokuapp.com/.
+Then open your browser and go to localhost:3001 to use the application.
 
 
 ![Alt text](./assets/images/image-1.png)
