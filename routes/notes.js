@@ -6,16 +6,16 @@ const {
 const uuid = require("../helpers/uuid");
 const notes = require("express").Router();
 
-notes.get("/notes", (req, res) => {
+notes.get("/", (req, res) => {
   readFromFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
 });
 
 notes.get("/:id", (req, res) => {
-  const noteId = req.params.note_id;
+  const noteId = req.params.id;
   readFromFile("./db/db.json")
     .then((data) => JSON.parse(data))
     .then((json) => {
-      const result = json.filter((note) => note.note_id === noteId);
+      const result = json.filter((note) => note.id === noteId);
       return result.length > 0
         ? res.json(result)
         : res.json("No note with that ID");
@@ -38,7 +38,7 @@ notes.post("/", (req, res) => {
   }
 });
 
-notes.delete("/notes/:id", (req, res) => {
+notes.delete("/:id", (req, res) => {
   const noteId = req.params.id;
   console.log(noteId);
   readFromFile("./db/db.json")
